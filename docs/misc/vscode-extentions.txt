@@ -1,0 +1,6 @@
+>> Language Support for Java™ by Red Hat
+>> Debugger for Java
+>> Test Runner for Java
+>> Project Manager for Java
+>> Maven
+>> IntelliCode

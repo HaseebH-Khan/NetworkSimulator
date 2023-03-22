@@ -1,0 +1,21 @@
+>> Github Boards (must try)
+>> ci
+>> .gitignore
+>> branching (obvio)
+>> script folder
+>> packages
+>> unit and mock testing (to be learnt)
+>> ARchitecture Decision Record (adr)
+
+>> MAVEN
+
+            << Easy Showcasing >>
+>> make file
+>> flatpak builder (must do) ===> follow: https://docs.flatpak.org/en/latest/first-build.html
+
+
+>> JUNG/GraphStream
+
+>> dependency injection
+>> >> class param
+>> >> singleton pattern (@Bean/ @Component) / (@Autowired / @inject)

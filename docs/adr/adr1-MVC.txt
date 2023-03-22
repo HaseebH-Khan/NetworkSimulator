@@ -1,0 +1,19 @@
+ADR-1: Use MVC architecture for project directory structure
+
+Context: 
+Implemented standard practices in software development industry as a learner. This was decided that, inorder to promote modularity in my TCP/IP application, MVC architecture will be used. 
+It will allow creation of independent packages for the TCP/IP layers and devices therby applying layering within the TCP/IP model. 
+
+Description:
+- Model: contains classes responsible for managing the data and logic of your application. 
+--   graph:
+--   tcp/ip:
+- View: contains classes responsible for presenting the data to the user through the user interface.
+--   graph-rendering:
+--   event-listners:
+- Component: contains classes responsible for handling user input and updating the Model and View components accordingly.
+--   graph-user-inputs:
+--   network-flow:
+
+Consequences:
+Independent modules have been created and layering has been implemented.
