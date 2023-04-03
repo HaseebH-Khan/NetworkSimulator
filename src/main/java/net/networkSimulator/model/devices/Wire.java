@@ -7,7 +7,8 @@ public class Wire {
     Wire(Port end1, Port end2) {
         if(end1.connected == true || end2.connected == true) {
             System.out.println("Port is already connected. Cannot establish connection.");
-            // destroy wire
+            this.end1 = null;
+            this.end2 = null;
             return;
         }
         this.end1 = end1;
@@ -18,20 +19,22 @@ public class Wire {
         end2.connected = true;
     }
     public void disconnect() {
-        end1.connected = false;
-        end2.connected = false;
-        end1.idle = true;
-        end2.idle = true;
-        // destroy wire
-
+        this.end1.connected = false;
+        this.end2.connected = false;
+        this.end1.idle = true;
+        this.end2.idle = true;
+        this.end1.wire = null;
+        this.end2.wire = null;
+        this.end1 = null;
+        this.end2 = null;
     }
-    public void send(String message, Port port) {
+    public void send(String message, int rec_id, int sen_id, Port port) {
         if(port.idle == true) {
             if(port == end1) {
                 if(end2.idle == true) {
                     end2.idle = false;
                     end1.idle = false;
-                    end2.read(message);
+                    end2.read(message, rec_id, sen_id);
                 }
                 else {
                     System.out.println("Destination port is busy");
@@ -41,7 +44,7 @@ public class Wire {
                 if(end1.idle == true) {
                     end1.idle = false;
                     end2.idle = false;
-                    end1.read(message);
+                    end1.read(message, rec_id, sen_id);
                 }
                 else {
                     System.out.println("Destination port is busy");
