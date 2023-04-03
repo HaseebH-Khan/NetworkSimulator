@@ -1,0 +1,14 @@
+In a broadcast message forwarding, to prevent a broadcast storm, token passing is to be implemented.
+
+Token Bus: In this type of token passing, a token is circulated around the network in a similar way to Token Ring.
+However, instead of a predefined order, devices contend for the token when it becomes available.
+When a device wants to transmit data, it waits for the token to become available, seizes it, and attaches its data to the token.
+The token with the data then circulates around the network until it reaches the destination device, 
+which removes the data from the token and releases it back into the network.
+
+Token Bus, multiple tokens can be used, and each token circulates around a specific portion of the network. 
+This allows for multiple devices to transmit data simultaneously on different portions of the network.
+
+To implement token passing in a network, each device needs to be equipped with a token passing protocol that controls the transmission of data.
+The protocol ensures that devices transmit data only when they hold the token and that they release the token when they have completed transmission. 
+Token passing can be implemented in hardware or software, and it requires a certain level of coordination among devices to ensure proper operation.

@@ -1,17 +1,17 @@
 package main.java.net.networkSimulator.model.devices;
 
 public class Port {
-    EndDevice dev;
+    Device dev;
     int port_id; // port id wrt device
     boolean connected = false;
     Wire wire;
     boolean idle = true;
-    public void send(String message) {
-        this.wire.send(message, this);
+    public void send(String message, int rec_id, int sen_id) {
+        this.wire.send(message, rec_id, sen_id, this);
     }
-    public void read(String message) {
-        System.out.println("Port " + this.port_id + " received the message and sent it to the device");
-        this.dev.read(message);
+    public void read(String message, int rec_id, int sen_id) {
+        System.out.println("Port " + this.port_id + " of Device " + rec_id + " received the message and sent it to the device");
+        this.dev.read(message, rec_id, sen_id);
     }
     // this method exchanges the wire reference between the two ports
     public void connect(Wire wire, Port port2) {
@@ -34,8 +34,10 @@ public class Port {
         }
     }
     public void disconnect() {
-        connected = false;
+        if(this.connected == false) {
+            System.out.println("Port is not connected");
+            return;
+        }
         wire.disconnect();
-        // destoy wire reference
     }
 }
