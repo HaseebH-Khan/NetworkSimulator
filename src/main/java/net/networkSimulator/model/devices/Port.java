@@ -14,9 +14,8 @@ public class Port {
     public void read(String message, int rec_id, int sen_id) {
         System.out.println(
                 "Port " + this.port_id + " of Device " + rec_id + " received the message and sent it to the device");
-        this.dev.read(message, rec_id, sen_id);
+        this.dev.read(message, rec_id, sen_id, this.port_id);
     }
-
     // this method exchanges the wire reference between the two ports
     public void connect(Wire wire, Port port2) {
         this.wire = wire;

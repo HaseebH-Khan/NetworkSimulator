@@ -2,11 +2,11 @@ package main.java.net.networkSimulator.model.devices;
 
 public class EndDevice implements Device {
     static int counter = 0; // for unique device id
-    int dev_id;
-    int portN;
-    Port[] ports;
+    public int dev_id;
+    public int portN;
+    public Port[] ports;
 
-    EndDevice(int portN) {
+    public EndDevice(int portN) {
         this.portN = portN;
         ports = new Port[portN];
         counter++;
@@ -28,7 +28,7 @@ public class EndDevice implements Device {
 
     }
 
-    public void read(String message, int rec_id, int sen_id) {
+    public void read(String message, int rec_id, int sen_id, int port_id) {
         System.out.println("Device " + this.dev_id + " received message: " + message);
         if (this.dev_id == rec_id) {
             System.out.println("Message deciphered by destination device");
@@ -37,26 +37,5 @@ public class EndDevice implements Device {
         } else {
             send(message, rec_id, sen_id);
         }
-    }
-
-    public static void main(String[] args) {
-        EndDevice dev1 = new EndDevice(2);
-        EndDevice dev2 = new EndDevice(2);
-        EndDevice dev3 = new EndDevice(3);
-        Bridge bridge1 = new Bridge();
-        EndDevice dev4 = new EndDevice(3);
-        EndDevice dev5 = new EndDevice(2);
-        EndDevice dev6 = new EndDevice(2);
-        Wire wire1 = new Wire(dev1.ports[0], dev2.ports[1]);
-        Wire wire2 = new Wire(dev2.ports[0], dev3.ports[1]);
-        Wire wire3 = new Wire(dev3.ports[0], dev1.ports[1]);
-        Wire wireBridge1 = new Wire(dev3.ports[2], bridge1.ports[0]);
-        Wire wireBridge2 = new Wire(dev4.ports[2], bridge1.ports[1]);
-        Wire wire4 = new Wire(dev4.ports[0], dev5.ports[1]);
-        Wire wire5 = new Wire(dev5.ports[0], dev6.ports[1]);
-        Wire wire6 = new Wire(dev6.ports[0], dev4.ports[1]);
-
-        dev1.send("Salamalaikum", 5, 1);
-
     }
 }

@@ -1,11 +1,11 @@
 package main.java.net.networkSimulator.model.devices;
 
 public class Hub implements Device {
-    int portN;
-    int hub_id;
+    public int portN;
+    public int hub_id;
     static int hub_count = 0;
-    Port[] ports;
-    Hub(int portN) {
+    public Port[] ports;
+    public Hub(int portN) {
         this.portN = portN;
         ports = new Port[portN];
         for(int i = 0; i < portN; i++) {
@@ -25,7 +25,7 @@ public class Hub implements Device {
         }
         
     }
-    public void read(String message, int rec_id, int sen_id) {
+    public void read(String message, int rec_id, int sen_id, int port_id) {
         System.out.println("Hub " + this.hub_id + " received message: " + message);
             send(message, rec_id, sen_id);
     }

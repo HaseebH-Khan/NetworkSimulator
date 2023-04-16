@@ -3,13 +3,13 @@ package main.java.net.networkSimulator.model.devices;
 import java.util.HashMap;
 
 public class Bridge implements Device {
-    final int portN = 2;
-    int bridge_id;
+    public final int portN = 2;
+    public int bridge_id;
     static int bridge_count = 0;
-    Port[] ports;
+    public Port[] ports;
     static HashMap<Integer, Integer> data_table;// To maintain the dev_id to port_id mapping
 
-    Bridge() {
+    public Bridge() {
         ports = new Port[this.portN];
         bridge_count++;
         this.bridge_id = bridge_count;
@@ -21,7 +21,7 @@ public class Bridge implements Device {
         data_table = new HashMap<>();
     }
 
-    public void read(String message, int rec_id, int sen_id) {
+    public void read(String message, int rec_id, int sen_id, int port_id) {
 
         Integer port_id_rec = data_table.get(rec_id);
         Integer port_id_sen = data_table.get(sen_id);
