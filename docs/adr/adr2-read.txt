@@ -1,0 +1,1 @@
+read fxn of layer 1 devices should not ake port-id param

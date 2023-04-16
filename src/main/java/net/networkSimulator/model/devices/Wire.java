@@ -4,7 +4,7 @@ public class Wire {
     Port end1 = new Port();
     Port end2 = new Port();
 
-    Wire(Port end1, Port end2) {
+    public Wire(Port end1, Port end2) {
         if (end1.connected == true || end2.connected == true) {
             System.out.println("Port is already connected. Cannot establish connection.");
             this.end1 = null;
