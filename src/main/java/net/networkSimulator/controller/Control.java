@@ -3,12 +3,15 @@ import java.util.Scanner;
 import java.util.HashMap;
 
 import main.java.net.networkSimulator.model.devices.*;
+import main.java.net.networkSimulator.model.layers.datalink.*;
+import main.java.net.networkSimulator.view.*;
 
 public class Control {
     static public HashMap<Integer, EndDevice> endDeviceMapping = new HashMap<Integer, EndDevice>();
     static public HashMap<Integer, Hub> hubMapping = new HashMap<Integer, Hub>();
     static public HashMap<Integer, Switch> switchMapping = new HashMap<Integer, Switch>();
     static public HashMap<Integer, Bridge> bridgeMapping = new HashMap<Integer, Bridge>();
+    static public Thread thread = new Thread(new TokenPassing());
 
     public EndDevice getEndDevice(int dev_id) {
         return endDeviceMapping.get(dev_id);
@@ -61,6 +64,7 @@ public class Control {
         EndDevice endDevice = new EndDevice(portN);
         System.out.println("End Device " + endDevice.dev_id + " created with " + portN + " ports");
         endDeviceMapping.put(endDevice.dev_id, endDevice);
+        TokenPassing.endDevicesCount++;
     }
     public void createHub(int portN) {
         if(portN < 2) throw new IllegalArgumentException("Hub must have at least 2 ports");
@@ -82,7 +86,7 @@ public class Control {
             case 1:
                 System.out.println("Enter the End Device id of first device: ");
                 int dev_id1 = sc.nextInt();
-                System.out.println("TEST: " + dev_id1 + " and " + getEndDevice(dev_id1));
+                // System.out.println("TEST: " + dev_id1 + " and " + getEndDevice(dev_id1));
                 port1 = getPortEndDevice(getEndDevice(dev_id1));
                 break;
             case 2:
@@ -163,5 +167,17 @@ public class Control {
         int wire_id = sc.nextInt();
         // Wire wire = getWire(wire_id);
         // wire.disconnect();
+    }
+    public void initializeNetwork() {
+        TokenPassing.endDevicesCount = endDeviceMapping.size();
+        thread.start();
+        while(true) {
+            Main.fetchCommands();
+        }
+        // try {
+        //     thread.join();
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
     }
 }

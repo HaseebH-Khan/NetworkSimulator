@@ -4,6 +4,7 @@ public class EndDevice implements Device {
     static int counter = 0; // for unique device id
     public int dev_id;
     public int portN;
+    public boolean tokenAvailable = false;
     public Port[] ports;
 
     public EndDevice(int portN) {
@@ -19,6 +20,10 @@ public class EndDevice implements Device {
     }
 
     public void send(String message, int rec_id, int sen_id) {
+        if(tokenAvailable==false) {
+            System.out.println("Token not available");
+            return;
+        }
         for (int i = 0; i < portN; i++) {
             if (ports[i].connected == true) {
                 System.out.println("Device " + this.dev_id + " broadcasted message: " + message + " on port " + i);

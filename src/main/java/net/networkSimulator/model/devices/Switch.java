@@ -35,7 +35,7 @@ public class Switch implements Device {
     }
     public void read(String message, int rec_id, int sen_id, int port_id) {
         System.out.println("Switch " + this.switch_id + " received message: " + message);
-        cache.put(rec_id, port_id);
+        cache.put(sen_id, port_id);
         send(message, rec_id, sen_id);
     }
 }

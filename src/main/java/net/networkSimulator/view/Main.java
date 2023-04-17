@@ -1,24 +1,12 @@
 package main.java.net.networkSimulator.view;
 import main.java.net.networkSimulator.controller.*;
 import main.java.net.networkSimulator.model.devices.*;
+import main.java.net.networkSimulator.model.layers.datalink.*;
 import java.util.Scanner;
 
-public class Main {  
-    public static void main(String[] args) {
-        System.out.println("Network Simulator");
-        System.out.println("==================================");
-        System.out.println("Enter the operation you want to perform: ");
-        System.out.println("1. Create an End Device");
-        System.out.println("2. Create a Hub");
-        System.out.println("3. Create a Wire");
-        System.out.println("4. Create a Switch");
-        System.out.println("5. Create a Bridge");
-        System.out.println("6. Send a message");
-        System.out.println("7. Disconnect a Wire");
-        System.out.println("8. Exit");
-        System.out.println("==================================");
-        while(true) {
-            System.out.print(">> ");
+public class Main { 
+    public static void fetchCommands() {
+        System.out.print(">> ");
             Scanner sc = new Scanner(System.in);
             int choice = sc.nextInt();
             Control control = new Control();
@@ -60,12 +48,33 @@ public class Main {
                     control.disconnectWire();
                     break;
                 case 8:
+                    control.initializeNetwork();
+                case 9:
+                    // TokenPassing.stop();
+                    // Control.thread.join();
                     System.exit(0);
                     break;
                 default:
                     System.out.println("Invalid choice");
                     break;
             }
+    }
+    public static void main(String[] args) {
+        System.out.println("Network Simulator");
+        System.out.println("==================================");
+        System.out.println("Enter the operation you want to perform: ");
+        System.out.println("1. Create an End Device");
+        System.out.println("2. Create a Hub");
+        System.out.println("3. Create a Wire");
+        System.out.println("4. Create a Switch");
+        System.out.println("5. Create a Bridge");
+        System.out.println("6. Send a message");
+        System.out.println("7. Disconnect a Wire");
+        System.out.println("8. Initialize the network");
+        System.out.println("9. Exit");
+        System.out.println("==================================");
+        while(true) {
+            fetchCommands();
         }
     }
 }
