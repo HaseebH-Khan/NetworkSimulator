@@ -7,14 +7,14 @@ public class Port {
     Wire wire;
     boolean idle = true;
 
-    public void send(String message, int rec_id, int sen_id) {
-        this.wire.send(message, rec_id, sen_id, this);
+    public void send(String message, int rec_id, int sen_id, int seqNo) {
+        this.wire.send(message, rec_id, sen_id, seqNo, this);
     }
 
-    public void read(String message, int rec_id, int sen_id) {
+    public void read(String message, int rec_id, int sen_id, int seqNo) {
         System.out.println(
                 "Port " + this.port_id + " of Device " + rec_id + " received the message and sent it to the device");
-        this.dev.read(message, rec_id, sen_id, this.port_id);
+        this.dev.read(message, rec_id, sen_id, this.port_id, seqNo);
     }
     // this method exchanges the wire reference between the two ports
     public void connect(Wire wire, Port port2) {
@@ -33,6 +33,14 @@ public class Port {
         } else {
             System.out.println("Port not found");
         }
+    }
+
+    public void sendAck(int rec_id, int sen_id, int seqNo) {
+        this.wire.sendAck(rec_id, sen_id, seqNo, this);
+    }
+    public void readAck(int rec_id, int sen_id, int seqNo) {
+        System.out.println("Port " + this.port_id + " of Device " + rec_id + " received the ACK");
+        this.dev.readAck(rec_id, sen_id, this.port_id, seqNo);
     }
 
     public void disconnect() {

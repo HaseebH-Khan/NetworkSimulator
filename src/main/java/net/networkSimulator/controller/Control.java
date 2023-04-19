@@ -1,6 +1,5 @@
 package main.java.net.networkSimulator.controller;
-import java.util.Scanner;
-import java.util.HashMap;
+import java.util.*;
 
 import main.java.net.networkSimulator.model.devices.*;
 import main.java.net.networkSimulator.model.layers.datalink.*;
@@ -148,7 +147,10 @@ public class Control {
         return wire;
     }
     public void createBridge() {
-        Bridge bridge = new Bridge();
+        System.out.println("Enter the number of ports of Bridge: ");
+        Scanner sc = new Scanner(System.in);
+        int portN = sc.nextInt();
+        Bridge bridge = new Bridge(portN);
         System.out.println("Bridge " + bridge.bridge_id + " created");
         bridgeMapping.put(bridge.bridge_id, bridge);
     }
@@ -157,9 +159,41 @@ public class Control {
         System.out.println("Switch " + sw.switch_id + " created");
         switchMapping.put(sw.switch_id, sw);
     }
-    public void sendMessage(String message, int rec_id, int sen_id) {
+    public void sendMessage() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the sender id: ");
+        int sen_id = sc.nextInt();
+        System.out.println("Enter the receiver id: ");
+        int rec_id = sc.nextInt();
+        System.out.println("Enter the number of frames: ");
+        int packetN = sc.nextInt();
+        List<String> packets = new ArrayList<String>();
+        for(int i = 1; i <= packetN; i++) {
+            System.out.println("Enter the "+i+"th frame: ");
+            String packet = sc.nextLine();
+            packets.add(packet);
+        }
         EndDevice dev = getEndDevice(sen_id);
-        dev.send(message, rec_id, sen_id);
+        EndDevice rec = getEndDevice(rec_id);
+        System.out.println("Select Flow Control Protocol: ");
+        System.out.println("1. Stop and Wait");
+        System.out.println("2. Go Back N");
+        switch (sc.nextInt()) {
+            case 1:
+                StopAndWait stopAndWait = new StopAndWait(dev, rec);
+                stopAndWait.sendPacket(packets);
+                break;
+            case 2:
+                System.out.println("Enter the window size: ");
+                int windowSize = sc.nextInt();
+                GoBackN goBackN = new GoBackN(dev, rec, windowSize, packetN);
+                goBackN.sendPacket(packets);
+                break;
+            default:
+                System.out.println("Invalid choice");
+                break;
+        }
+        // dev.send(message, rec_id, sen_id, );
     }
     public void disconnectWire() {
         System.out.println("Enter the wire id to be disconnected: ");

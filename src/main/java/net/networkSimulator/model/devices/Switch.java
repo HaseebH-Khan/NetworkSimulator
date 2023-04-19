@@ -19,23 +19,42 @@ public class Switch implements Device {
         switch_count++;
         this.switch_id = switch_count;
     }
-    public void send(String message, int rec_id, int sen_id) {
+    public void send(String message, int rec_id, int sen_id, int seqNo) {
         if(cache.containsKey(rec_id)) {
             int port_id = cache.get(rec_id);
             System.out.println("Switch " + this.switch_id + " directed message: " + message  + " on port " + port_id);
-            ports[port_id].send(message, rec_id, sen_id);
+            ports[port_id].send(message, rec_id, sen_id, seqNo);
         } else {
             for(int i=0; i<portN; i++) {
                 if(ports[i].connected == true) {
                     System.out.println("Switch " + this.switch_id + " broadcasted message: " + message  + " on port " + i);
-                    ports[i].send(message, rec_id, sen_id);
+                    ports[i].send(message, rec_id, sen_id, seqNo);
                 }
             }
         }        
     }
-    public void read(String message, int rec_id, int sen_id, int port_id) {
+    public void read(String message, int rec_id, int sen_id, int port_id, int seqNo) {
         System.out.println("Switch " + this.switch_id + " received message: " + message);
         cache.put(sen_id, port_id);
-        send(message, rec_id, sen_id);
+        send(message, rec_id, sen_id, seqNo);
+    }
+    public void sendAck(int rec_id, int sen_id, int seqNo) {
+        if(cache.containsKey(rec_id)) {
+            int port_id = cache.get(rec_id);
+            System.out.println("Switch " + this.switch_id + " directed ACK: " + seqNo  + " on port " + port_id);
+            ports[port_id].sendAck(rec_id, sen_id, seqNo);
+        } else {
+            for(int i=0; i<portN; i++) {
+                if(ports[i].connected == true) {
+                    System.out.println("Switch " + this.switch_id + " broadcasted ACK: " + seqNo  + " on port " + i);
+                    ports[i].sendAck(rec_id, sen_id, seqNo);
+                }
+            }
+        }
+    }
+    public int readAck(int rec_id, int sen_id, int port_id, int seqNo) {
+        cache.put(sen_id, port_id);
+        sendAck(rec_id, sen_id, seqNo);
+        return seqNo;
     }
 }

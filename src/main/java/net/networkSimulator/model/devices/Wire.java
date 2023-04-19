@@ -22,37 +22,63 @@ public class Wire {
     public void disconnect() {
         this.end1.connected = false;
         this.end2.connected = false;
-        this.end1.idle = true;
-        this.end2.idle = true;
+        // this.end1.idle = true;
+        // this.end2.idle = true;
         this.end1.wire = null;
         this.end2.wire = null;
         this.end1 = null;
         this.end2 = null;
     }
 
-    public void send(String message, int rec_id, int sen_id, Port port) {
-        if (port.idle == true) {
+    public void send(String message, int rec_id, int sen_id, int seqNo, Port port) {
+        // if (port.idle == true) {
             if (port == end1) {
-                if (end2.idle == true) {
-                    end2.idle = false;
-                    end1.idle = false;
-                    end2.read(message, rec_id, sen_id);
-                } else {
-                    System.out.println("Destination port is busy");
-                }
+                // if (end2.idle == true) {
+                    // end2.idle = false;
+                    // end1.idle = false;
+                    end2.read(message, rec_id, sen_id, seqNo);
+                // } else {
+                    // System.out.println("Destination port is busy");
+                // }
             } else if (port == end2) {
-                if (end1.idle == true) {
-                    end1.idle = false;
-                    end2.idle = false;
-                    end1.read(message, rec_id, sen_id);
-                } else {
-                    System.out.println("Destination port is busy");
-                }
+                // if (end1.idle == true) {
+                    // end1.idle = false;
+                    // end2.idle = false;
+                    end1.read(message, rec_id, sen_id, seqNo);
+                // } else {
+                    // System.out.println("Destination port is busy");
+                // }
             } else {
                 System.out.println("Port not found");
             }
-        } else {
-            System.out.println("Sender port is busy");
-        }
+        // } else {
+            // System.out.println("Sender port is busy");
+        // }
+    }
+
+    public void sendAck(int rec_id, int sen_id, int seqNo, Port port) {
+        // if (port.idle == true) {
+            if (port == end1) {
+                // if (end2.idle == true) {
+                //     end2.idle = false;
+                //     end1.idle = false;
+                    end2.readAck(rec_id, sen_id, seqNo);
+                // } else {
+                //     System.out.println("Destination port is busy");
+                // }
+            } else if (port == end2) {
+                // if (end1.idle == true) {
+                //     end1.idle = false;
+                //     end2.idle = false;
+                    end1.readAck(rec_id, sen_id, seqNo);
+                // } else {
+                //     System.out.println("Destination port is busy");
+                // }
+            } else {
+                System.out.println("Port not found");
+            }
+        // } else {
+        //     System.out.println("Sender port is busy");
+        // }
     }
 }

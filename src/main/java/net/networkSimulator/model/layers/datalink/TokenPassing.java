@@ -4,7 +4,7 @@ import main.java.net.networkSimulator.model.devices.*;
 
 public class TokenPassing implements Runnable {
     static public int tokenPosition = 1;
-    final static public int tokenTimeout = 5000;
+    final static public int tokenTimeout = 10000;
     static public int endDevicesCount = 0;
     static boolean keepRunning = true;
     public void run() {
@@ -18,6 +18,7 @@ public class TokenPassing implements Runnable {
         try {
             dev.tokenAvailable = true;
             Thread.sleep(tokenTimeout);
+            // notifyAll();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

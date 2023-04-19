@@ -1,16 +1,17 @@
 package main.java.net.networkSimulator.model.devices;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class Bridge implements Device {
-    public final int portN = 2;
+    public Map<Integer, Integer> cache; // end device id, port id
+    public int portN;
     public int bridge_id;
     static int bridge_count = 0;
     public Port[] ports;
-    static HashMap<Integer, Integer> data_table;// To maintain the dev_id to port_id mapping
-
-    public Bridge() {
-        ports = new Port[this.portN];
+    public Bridge(int portN) {
+        cache = new HashMap<Integer, Integer>();
+        this.portN = portN;
+        ports = new Port[portN];
         bridge_count++;
         this.bridge_id = bridge_count;
         for (int i = 0; i < this.portN; i++) {
@@ -18,51 +19,44 @@ public class Bridge implements Device {
             ports[i].port_id = i;
             ports[i].dev = this;
         }
-        data_table = new HashMap<>();
     }
 
-    public void read(String message, int rec_id, int sen_id, int port_id) {
+    public void read(String message, int rec_id, int sen_id, int port_id, int seqNo) {
+        System.out.println("Port " + port_id + " of Bridge " + this.bridge_id + " received the message");
+        cache.put(sen_id, port_id);
+        send(message, rec_id, sen_id, seqNo);
+    }
 
-        Integer port_id_rec = data_table.get(rec_id);
-        Integer port_id_sen = data_table.get(sen_id);
-
-        if (port_id_rec != null) {
-            if (port_id_rec == port_id_sen) {
-                System.out.println("Receiver and sender are on the same side of bridge. Aborting transfer...");
-                return;
-            }
-            // If the recipient is mapped to a port, send the message to that port
-            System.out.println(
-                    "Port " + port_id_sen + " of Bridge " + this.bridge_id
-                            + " received the message and sent it to the device");
-            ports[port_id_rec].send(message, rec_id, sen_id);
+    public void send(String message, int rec_id, int sen_id, int seqNo) {
+        if(cache.containsKey(rec_id)) {
+            int port_id = cache.get(rec_id);
+            System.out.println("Port " + sen_id + " of Bridge " + this.bridge_id + " directed the message.");
+            ports[cache.get(rec_id)].send(message, rec_id, sen_id, seqNo);
         } else {
-            // If the recipient is not mapped, broadcast the message to all ports except the
-            // sender's port
-            learn(sen_id);
-            learn(rec_id);
-            System.out.println(
-                    "Port " + port_id_sen + " of Bridge " + this.bridge_id
-                            + " received the message and broadcasted it. Device id and respective port id were mapped.");
-            for (int i = 0; i < this.portN; i++) {
-                if (ports[i].port_id != sen_id) {
-                    ports[i].send(message, rec_id, sen_id);
+            for(int i=0; i<this.portN; i++) {
+                if(ports[i].connected == true) {
+                    ports[i].send(message, rec_id, sen_id, seqNo);
                 }
             }
         }
-
     }
 
-    public void send(String message, int rec_id, int sen_id) {
-
-    }
-
-    public void learn(int dev_id) { // * not sure about this one, I am unable to get which port of bridge should be
-        // * mapped to the dev_id. Haseeb check it
-        for (int i = 0; i < this.portN; i++) {
-            if (ports[i].dev != null && ports[i].dev != this && data_table.get(dev_id) == null && !ports[i].idle) {
-                data_table.put(dev_id, ports[i].port_id);
+    public void sendAck(int rec_id, int sen_id, int seqNo) {
+        if(cache.containsKey(rec_id)) {
+            int port_id = cache.get(rec_id);
+            System.out.println("Port " + sen_id + " of Bridge " + this.bridge_id + " directed the ACK.");
+            ports[cache.get(rec_id)].sendAck(rec_id, sen_id, seqNo);
+        } else {
+            for(int i=0; i<this.portN; i++) {
+                if(ports[i].connected == true) {
+                    ports[i].sendAck(rec_id, sen_id, seqNo);
+                }
             }
         }
+    }
+    public int readAck(int rec_id, int sen_id, int port_id, int seqNo) {
+        cache.put(sen_id, port_id);
+        sendAck(rec_id, sen_id, seqNo);
+        return seqNo;
     }
 }

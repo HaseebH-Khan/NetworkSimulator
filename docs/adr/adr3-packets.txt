@@ -1,0 +1,4 @@
+implement a class for packets
+- data
+- header
+- tailer
